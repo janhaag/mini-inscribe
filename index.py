@@ -47,6 +47,7 @@ def init_assist_stage2():
     print("<html><head><title>Init results:</title></head>")
     print("<body><h1>Init results</h1>")
     print(keys)
+    print("<a href=\"index.py\">Finish setup</a></body></html>"")
     print("</body></html>")
 
 def process_form():
