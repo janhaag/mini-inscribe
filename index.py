@@ -126,7 +126,6 @@ def print_table(settings):
         if settings["query.columns"] == "*":
             cols = get_keys()
             for (col, t) in cols:
-                print(col)
                 header.append(col)
         else:
             header = settings["query.columns"].split(", ")
