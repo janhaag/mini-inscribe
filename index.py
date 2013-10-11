@@ -16,6 +16,9 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+print("Content-Type: text/html")
+print()
+
 import cgitb
 cgitb.enable()
 
@@ -24,9 +27,6 @@ import sqlite3
 
 from cgi import FieldStorage
 from html import escape
-
-print("Content-Type: text/html")
-print()
 
 form = FieldStorage()
 conn = sqlite3.connect("db/result.db", detect_types=sqlite3.PARSE_DECLTYPES)
@@ -69,23 +69,23 @@ def init_assist_stage2():
 def process_form():
     known_keys = get_keys()
     vals = []
-    for key in known_keys.keys():
+    for (key, t) in known_keys:
         if key not in form.keys():
-            if known_keys[key] == "INTEGER":
+            if t == "INTEGER":
                 vals.append(0)
-            elif known_keys[key] == "REAL":
+            elif t == "REAL":
                 vals.append(0.0)
             else:
                 vals.append("")
             continue
         val = form.getfirst(key)
-        if known_keys[key] == "INTEGER":
+        if t == "INTEGER":
             try:
                 val = int(val)
                 vals.append(val)
             except:
                 bail(key + " should be an int, but isn't.")
-        elif known_keys[key] == "REAL":
+        elif t == "REAL":
             try:
                 val = float(val)
                 vals.append(val)
@@ -182,10 +182,10 @@ def get_keys():
     cur.execute("select keys from system")
     keys_db = cur.fetchone()[0]
     keys_db = keys_db.split(", ")
-    keys = {}
+    keys = []
     for typedkey in keys_db:
         (key, t) = typedkey.split(" ")
-        keys[key] = t
+        keys.append((key, t))
     return keys
 
 def print_user_form():
