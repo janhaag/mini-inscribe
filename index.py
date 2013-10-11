@@ -122,8 +122,27 @@ def print_table(settings):
     if settings["table.prefix"] != "":
         print(settings["table.prefix"])
     if settings["table.hidehead"] == "false":
-        keys = get_keys()
-        print_table_line(settings, keys.keys())
+        header = []
+        if settings["query.columns"] == "*":
+            cols = get_keys()
+            for (col, t) in cols:
+                print(col)
+                header.append(col)
+        else:
+            header = settings["query.columns"].split(", ")
+        header_renamed = []
+        for col in header:
+            if " AS " in col:
+                c = col.split(" AS ")[1]
+                c = c.strip('"')
+                header_renamed.append(c)
+            elif " as " in col:
+                c = col.split(" as ")[1]
+                c = c.strip('"')
+                header_renamed.append(c)
+            else:
+                header_renamed.append(col)
+        print_table_line(settings, header_renamed)
         if settings["table.headsep"] != "":
             print(settings["table.headsep"])
     query = "select "
