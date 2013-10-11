@@ -141,7 +141,10 @@ def print_table(settings):
 
 def print_table_line(settings, fields):
     line = settings["table.preline"]
-    line += settings["table.colsep"].join(fields)
+    f = []
+    for field in fields:
+        f.append(str(field))
+    line += settings["table.colsep"].join(f)
     line += settings["table.postline"]
     print(line)
 
